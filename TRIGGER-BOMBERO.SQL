@@ -1,0 +1,23 @@
+--Autor:Eddu Ariel Saldarriaga Carrillo
+--Materia:Gestion de Base de Datos 5 "A"
+--Docente: Robert Moreira
+--Tema:Univero Discurso Cuerpo De Bomberos
+--Fecha:20/11/2022
+--LENGUAJE PROCEDIMENTAL PLSQL ORACLE
+  
+  
+  --TRIGGER 
+  create or replace TRIGGER CONTROL_ASIGNACION
+    BEFORE INSERT ON ASIGNACION FOR EACH ROW
+    DECLARE 
+    GUARDADOR NUMBER;
+        CURSOR V_CURSOR IS SELECT A.FK_IDINSTRUMENTOS,A.FK_IDBOMBERO FROM ASIGNACION A; 
+    begin 
+      
+     FOR GUARDADOR IN V_CURSOR LOOP
+         IF GUARDADOR.FK_IDBOMBERO = :NEW.FK_IDBOMBERO AND GUARDADOR.FK_IDINSTRUMENTOS = :NEW.FK_IDINSTRUMENTOS THEN
+          RAISE_APPLICATION_ERROR(-20202, 'YA ESTA ASIGNADO'); 
+         END IF;
+         END LOOP;  
+     END;
+     
